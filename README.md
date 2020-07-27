@@ -2,6 +2,11 @@
 
 [Why top and free inside containers don't show the correct container memory](https://ops.tips/blog/why-top-inside-container-wrong-memory/)
 
+Go through the reason why free and top show the host's memory instead of container memory.
+by Ciro S. Costa - Oct 12, 2018
+
+## Below are some changes to work on Ubuntu 20.04 with swap
+
 docker run --rm  --interactive --tty --memory "$((1024 * 1024 * 10))" ubuntu
 
 ## How the top and free tools gather memory statistics
