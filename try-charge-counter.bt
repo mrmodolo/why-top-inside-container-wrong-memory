@@ -1,0 +1,31 @@
+#include <linux/page_counter.h>
+#include <asm-generic/atomic-long.h>
+
+
+BEGIN
+{
+  printf("Tracing page_counter_try_charge... Hit Ctrl-C to end.\n");
+  printf("%-8s %-6s %-16s %-10s %-10s %-10s\n",
+         "TIME", "PID", "COMM", "REQUESTED", "CURRENT", "LIMIT");
+
+	@epoch = nsecs;
+}
+
+
+kprobe:page_counter_try_charge
+{
+  $pcounter = (struct page_counter *)arg0;
+
+  $limit = $pcounter->max;
+  $current = $pcounter->usage.counter;
+  $requested = arg1;
+
+  printf("%-8d %-6d %-16s %-10ld %-10ld %-10ld\n",
+         (nsecs - @epoch) / 1000000,
+          pid,
+          comm,
+          $requested,
+          $current,
+          $limit
+  );
+}
